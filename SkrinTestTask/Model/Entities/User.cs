@@ -7,7 +7,6 @@ namespace SkrinTestTask.Model.Entities
     {
         [Key]
         public int Id { get; set; }
-        ICollection<Order> Orders { get; set; }
 
         [Required]
         [Unicode(false)]
@@ -35,5 +34,8 @@ namespace SkrinTestTask.Model.Entities
         [Unicode(false)]
         [MaxLength(100)]
         public string Name { get; set; } = null!;
+
+        ICollection<Order> Orders { get; set; }
+
     }
 }

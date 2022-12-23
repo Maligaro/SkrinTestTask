@@ -21,5 +21,7 @@ namespace SkrinTestTask.Model.Entities
 
         [Column(TypeName = "image(512)")]
         public byte[]? Picture { get; set; }
+
+        ICollection<OrderItem> OrderItems { get; set;}
     }
 }

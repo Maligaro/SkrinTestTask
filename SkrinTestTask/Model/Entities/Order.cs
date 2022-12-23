@@ -16,12 +16,12 @@ namespace SkrinTestTask.Model.Entities
         [Column(TypeName = "money")]
         public decimal TotalPrice { get; set; }
 
-        ICollection<OrderItem> OrderItems;
-
         [Required]
         public DateTime OrderDate { get; set; }
 
         [Required]
         public DateTime ShippingDate { get; set; }
+
+        ICollection<OrderItem> OrderItems;
     }
 }
