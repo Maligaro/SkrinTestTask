@@ -1,5 +1,5 @@
 ﻿using SkrinTestTask.Repositories.Interfaces;
-
+using System.Xml;
 
 namespace SkrinTestTask.Services
 {
@@ -20,11 +20,21 @@ namespace SkrinTestTask.Services
             this.orderItemRepository = orderItemRepository;
         }
 
-        public void ReadFromFile (string filePath)
+        public void ImportFromFile (string filePath)
         {
             var fileExtention = Path.GetExtension(filePath);
-            if (fileExtention.Equals(Extention, StringComparison.OrdinalIgnoreCase))
+            if (!fileExtention.Equals(Extention, StringComparison.OrdinalIgnoreCase))
                 throw new Exception($"Expected {Extention} file extention, got {fileExtention} instead. {filePath}");
+
+            var xml = new XmlDocument();
+            var rawXmlData = File.ReadAllText(filePath);
+            xml.LoadXml(rawXmlData);
+            var child = xml.DocumentElement.ChildNodes;
+            foreach (var node in child)
+            {
+                Console.WriteLine(node.ToString());
+            }
+
         }
     }
 }
