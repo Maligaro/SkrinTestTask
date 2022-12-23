@@ -5,6 +5,6 @@ namespace SkrinTestTask.Repositories.Interfaces
     public interface IProductRepository
     {
         public void CreateProduct(Product product);
-        public User GetProductById(int id);
+        public Product GetProductById(int id);
     }
 }

@@ -4,7 +4,7 @@ namespace SkrinTestTask.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
-        public void CreateOrderr(Order order);
-        public User GetOrderById(int id);
+        public void CreateOrder(Order order);
+        public Order GetOrderById(int id);
     }
 }
