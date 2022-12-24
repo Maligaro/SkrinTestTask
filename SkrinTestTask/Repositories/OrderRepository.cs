@@ -5,7 +5,7 @@ namespace SkrinTestTask.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
-        public void CreateOrder(Order order)
+        public void SaveOrder(Order order)
         {
             using (var db = new ApplicationContext())
             {

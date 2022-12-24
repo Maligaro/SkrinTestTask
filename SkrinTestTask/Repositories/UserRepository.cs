@@ -5,7 +5,7 @@ namespace SkrinTestTask.Repositories
 {
     internal class UserRepository : IUserRepository
     {
-        public void CreateUser(User user)
+        public void SaveUser(User user)
         {
             using (var db = new ApplicationContext())
             {

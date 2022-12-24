@@ -5,7 +5,7 @@ namespace SkrinTestTask.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        public void CreateProduct(Product product)
+        public void SaveProduct(Product product)
         {
             using (var db = new ApplicationContext())
             {

@@ -9,7 +9,7 @@ namespace SkrinTestTask.Repositories.Interfaces
 {
     public interface IOrderItemRepository
     {
-        public void CreateOrderItem(OrderItem orderItem);
+        public void SaveOrderItem(OrderItem orderItem);
         public OrderItem GetOrderItemByOrderId(int orderId);
         public OrderItem GetOrderItemByProductId(int productId);
     }

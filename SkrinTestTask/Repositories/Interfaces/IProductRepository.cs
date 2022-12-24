@@ -4,7 +4,7 @@ namespace SkrinTestTask.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        public void CreateProduct(Product product);
+        public void SaveProduct(Product product);
         public Product GetProductById(int id);
     }
 }
