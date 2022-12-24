@@ -30,7 +30,7 @@ namespace SkrinTestTask.Services
             this.orderItemRepository = orderItemRepository;
         }
 
-        public void ImportFromFile (string filePath)
+        public void ReadFromFile (string filePath)
         {
             var fileExtention = Path.GetExtension(filePath);
             if (!fileExtention.Equals(Extention, StringComparison.OrdinalIgnoreCase))
