@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SkrinTestTask.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkrinTestTask.Repositories
 {
@@ -17,12 +12,13 @@ namespace SkrinTestTask.Repositories
 
         public ApplicationContext()
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=SkrinTestTaskDatabase;Username=postgres;Password=123");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=SkrinTestTaskDatabase;Username=postgres;Password=123;Include Error Detail = True");
+
         }
     }
 }

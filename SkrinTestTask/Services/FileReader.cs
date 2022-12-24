@@ -1,4 +1,6 @@
-﻿using SkrinTestTask.Model.Entities;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using SkrinTestTask.Model.Entities;
 using SkrinTestTask.Repositories.Interfaces;
 using System.Globalization;
 using System.Xml;
@@ -39,76 +41,84 @@ namespace SkrinTestTask.Services
             xml.LoadXml(rawXmlData);
 
             var orders = xml.DocumentElement.GetElementsByTagName("order");
-            InitializeDbObjects(orders);
-            SaveToDb();
+            SaveOrdersToDb(orders);
         }
 
-        private void SaveToDb()
-        {
-            users.ForEach(userRepository.SaveUser);
-            products.ForEach(productRepository.SaveProduct);
-            orders.ForEach(orderRepository.SaveOrder);
-            orderItems.ForEach(orderItemRepository.SaveOrderItem);
-        }
-
-        private void InitializeDbObjects(XmlNodeList ordersXml)
+        private void SaveOrdersToDb(XmlNodeList ordersXml)
         {
             foreach (XmlElement orderXml in ordersXml)
             {
-                var user = CreateUser(orderXml);
-
-                var order = new Order();
-                order.User = user;
-                order.TotalPrice = decimal.Parse(orderXml["sum"].InnerText, CultureInfo.InvariantCulture);
-                var orderDate = DateTime.ParseExact(orderXml["reg_date"].InnerText, "yyyy.MM.dd", new CultureInfo("ru-RU"));
-                order.OrderDate = orderDate;
-                //dummy data
-                order.OrderDate = order.OrderDate.AddDays(7);
-                orders.Add(order);
-
+                var user = CreateUser(orderXml["user"]);
+                var order = CraeteOrder(orderXml, user);
                 foreach (XmlElement productXml in orderXml.GetElementsByTagName("product"))
                 {
-                    var orderItem = new OrderItem();
-                    orderItems.Add(orderItem);
-                    orderItem.Amount = int.Parse(productXml["quantity"].InnerText);
-                    orderItem.Product = CraeteProduct(productXml);
-                    orderItem.Order = order;
-
+                    var product = CraeteProduct(productXml);
+                    var amount = int.Parse(productXml["quantity"].InnerText);
+                    CraeteOrderItem(order, product, amount);
                 }
             }
-
         }
 
-        private User CreateUser(XmlElement orderXml)
+        private OrderItem CraeteOrderItem(Order order, Product product, int amount)
         {
-            var user = new User();
-            user.Name = orderXml["user"]["fio"].InnerText;
-            user.Email = orderXml["user"]["email"].InnerText;
-            //dummy data
-            user.PhoneNumber = "+7 (800) 123-45-67";
-            user.HashedPassword = Enumerable.Range(0, 64).Select(c => 'a').ToArray().ToString();
-            user.HashedPassword = Enumerable.Range(0, 20).Select(c => 'a').ToArray().ToString();
-            users.Add(user);
+            var orderItem = new OrderItem();
+            orderItem.OrderId = order.Id;
+            orderItem.ProductId = product.Id;
+            orderItem.Amount = amount;
+            orderItemRepository.SaveOrderItem(orderItem);
+            return orderItem;
+        }
+
+        private Order CraeteOrder(XmlElement orderXml, User user)
+        {
+            var order = new Order();
+            order.UserId = user.Id;
+            order.TotalPrice = decimal.Parse(orderXml["sum"].InnerText, CultureInfo.InvariantCulture);
+            order.OrderDate = DateTime.ParseExact(orderXml["reg_date"].InnerText, "yyyy.MM.dd", new CultureInfo("ru-RU")).ToUniversalTime();
+            order.ShippingDate = order.OrderDate.AddDays(7).ToUniversalTime();
+            orderRepository.SaveOrder(order);
+            return order;
+        }
+
+        private User CreateUser(XmlElement userXml)
+        {
+            User user;
+            var email = userXml["email"].InnerText;
+            try
+            {
+                user = userRepository.GetUserByEmail(email);
+            }
+            catch (Exception ex) 
+            {
+                user = new User();
+                user.Email = userXml["email"].InnerText;
+                user.Name = userXml["fio"].InnerText;
+                user.Orders = new List<Order>();
+                //dummy data
+                user.PhoneNumber = "+7 (800) 123-45-67";
+                user.HashedPassword = String.Concat(Enumerable.Repeat('a', 64));
+                user.PasswordSalt = String.Concat(Enumerable.Repeat('a', 20));
+                userRepository.SaveUser(user);
+            }
             return user;
         }
 
         private Product CraeteProduct(XmlElement productXml)
         {
-            var result = new Product();
-
+            Product product;
             var name = productXml["name"].InnerText;
-            var price = decimal.Parse(productXml["price"].InnerText, CultureInfo.InvariantCulture);
-
-            result = products.FirstOrDefault(p => p.Name.Equals(name));
-            if (result == null)
+            try
             {
-                result = new Product();
-                result.Name = name;
-                result.Price = price;
-                products.Add(result);
+                product = productRepository.GetProductByName(name);
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                product = new Product();
+                product.Name = productXml["name"].InnerText;
+                product.Price = decimal.Parse(productXml["price"].InnerText, CultureInfo.InvariantCulture);
+                productRepository.SaveProduct(product);
+            }
+            return product;
         }
     }
 }

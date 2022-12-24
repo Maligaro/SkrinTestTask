@@ -6,5 +6,6 @@ namespace SkrinTestTask.Repositories.Interfaces
     {
         public void SaveProduct(Product product);
         public Product GetProductById(int id);
+        public Product GetProductByName(string name);
     }
 }

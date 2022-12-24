@@ -10,6 +10,7 @@ namespace SkrinTestTask.Model.Entities
         public int Id { get; set; }
 
         [ForeignKey("UserId")]
+        public int UserId { get; set; }
         public User User { get; set; } = null!;
 
         [Required]
@@ -22,6 +23,6 @@ namespace SkrinTestTask.Model.Entities
         [Required]
         public DateTime ShippingDate { get; set; }
 
-        ICollection<OrderItem> OrderItems;
+        public ICollection<OrderItem> OrderItems;
     }
 }

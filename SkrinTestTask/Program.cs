@@ -1,4 +1,6 @@
-﻿using Npgsql.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Npgsql.Internal;
 using SkrinTestTask.Model.Entities;
 using SkrinTestTask.Repositories;
 using SkrinTestTask.Services;

@@ -6,5 +6,6 @@ namespace SkrinTestTask.Repositories.Interfaces
     {
         public void SaveUser(User user);
         public User GetUserById(int id);
+        public User GetUserByEmail(string email);
     }
 }

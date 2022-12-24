@@ -19,9 +19,8 @@ namespace SkrinTestTask.Model.Entities
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
-        [Column(TypeName = "image(512)")]
         public byte[]? Picture { get; set; }
 
-        ICollection<OrderItem> OrderItems { get; set;}
+        public ICollection<OrderItem> OrderItems { get; set;}
     }
 }
