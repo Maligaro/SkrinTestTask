@@ -16,7 +16,7 @@ namespace SkrinTestTask
             var productRepository = new ProductRepository();
             var orderItemRepository = new OrderItemRepository();
             var reader = new XmlFileReader(userRepository, orderRepository, productRepository, orderItemRepository);
-            reader.ImportFromFile(".\\DataFiles\\DataFile.xml");
+            reader.ReadFromFile(".\\DataFiles\\DataFile.xml");
         }
     }
 }

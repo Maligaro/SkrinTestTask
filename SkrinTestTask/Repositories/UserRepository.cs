@@ -28,13 +28,13 @@ namespace SkrinTestTask.Repositories
             }
         }
 
-        public User GetUserByEmail(string emial)
+        public User GetUserByEmail(string email)
         {
             using (var db = new ApplicationContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.Email.Equals(emial));
+                var user = db.Users.FirstOrDefault(u => u.Email.Equals(email));
                 if (user is null)
-                    throw new Exception($"There is no user with name = \"{emial}\" in the database");
+                    throw new Exception($"There is no user with name = \"{email}\" in the database");
                 return user;
             }
         }
